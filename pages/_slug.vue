@@ -14,6 +14,25 @@
       </figure>
 
       <VueMarkdown class="markdown">{{ post.content }}</VueMarkdown>
+
+      <div ref="comments" class="comments">
+        <h3 class="title">Comentarios</h3>
+        <p class="total-comments">
+          Hay {{ article['total-comments'] || 0 }} comentarios
+        </p>
+
+        <div class="comments-list">
+          <CommentItem
+            v-for="comment in comments"
+            :key="comment._id"
+            v-bind="comment"
+          />
+        </div>
+
+        <div class="add-comment">
+          <InputComment @submit="createComment" />
+        </div>
+      </div>
     </article>
   </div>
 </template>
@@ -26,24 +45,58 @@ export default {
   components: {
     VueMarkdown,
   },
-  data() {
-    return {
-      post: {
-        title: 'Mi primer post',
-        author: 'Alguien',
-        updated: '14/08/2022',
-        description: 'Lorem ipsum dolor amet',
-        cover: 'https://placehold.co/1024x420',
-        content: '# Title\n\n## Second Title\n\nLorem ipsum dolor sit amet',
-      },
-    }
+  // middleware(context) {
+  //   const { redirect } = context
+  //   redirect('/')
+  // },
+  asyncData({ params, $http, isDev }) {
+    const { slug } = params
+    const baseUrl = isDev ? 'http://localhost:9999' : 'https://miniblog-platzi-nuxt2.netlify.app'
+    const article = $http.$get(`${baseUrl}/.netlify/functions/article?slug=${slug}`)
+    return article
   },
+  // data() {
+  //   return {
+  //     post: {
+  //       title: 'Mi primer post',
+  //       author: 'Alguien',
+  //       updated: '14/08/2022',
+  //       description: 'Lorem ipsum dolor amet',
+  //       cover: 'https://placehold.co/1024x420',
+  //       content: '# Title\n\n## Second Title\n\nLorem ipsum dolor sit amet',
+  //     },
+  //   }
+  // },
   head() {
     return {
       title: this.post.title,
       meta: [{ name: 'description', content: this.post?.description ?? '' }],
     }
   },
+  computed: {
+    post() {
+      return {
+        title: this.article?.title,
+        author: this.article?.['author-name'][0],
+        updated: this.article?.updated ? new Date(this.article.updated).toLocaleString() : '',
+        description: this.article?.description,
+        cover: this.article?.cover[0].thumbnails.full.url,
+        content: this.article?.content
+      }
+    }
+  },
+  methods: {
+    async createComment(comment) {
+      this.$nuxt.$loading.start()
+      const baseUrl = location.hostname === 'localhost' ? 'http://localhost:9999' : 'https://miniblog-platzi-nuxt2.netlify.app'
+      await fetch(
+        `${baseUrl}/.netlify/functions/comment?article=${this.article._id}`,
+        { method: 'post', body: JSON.stringify(comment) }
+      )
+      this.$nuxt.refresh()
+      this.$nuxt.$loading.finish()
+    }
+  }
 }
 </script>
 

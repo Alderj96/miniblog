@@ -5,7 +5,7 @@
     >
     <div class="author">
       <p>Por {{ author }}</p>
-      <small>Fechade publicación: {{ date }}</small>
+      <small>Fechade publicación: {{ date.toLocaleString() }}</small>
       <!-- <small>Fechade publicación: {{ date.toLocaleDateString() }}</small> -->
     </div>
 
