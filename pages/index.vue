@@ -17,21 +17,34 @@
 <script>
 export default {
   name: 'IndexPage',
-  data() {
+  async asyncData({ isDev, $http}) {
+    const baseUrl = isDev ? 'http://localhost:9999' : 'https://miniblog-platzi-nuxt2.netlify.app'
+    const url = `${baseUrl}/.netlify/functions/articles`
+    const { articles } = await $http.$get(url)
     return {
-      articles: [],
+      posts: articles
     }
   },
-  async mounted() {
-    const baseUrl = location.hostname === 'localhost' ? 'http://localhost:9999' : 'https://miniblog-platzi-nuxt2.netlify.app'
-    const url = `${baseUrl}/.netlify/functions/articles`
-    const { articles } = await this.$http.$get(url)
-    this.articles = articles.map(({ fields: a }) => ({
-      ...a,
-      author: a['author-name'][0],
-      date: new Date(a.updated),
-      cover: a.cover[0]?.thumbnails.large.url ?? ''
-    }))
+  // async mounted() {
+  //   const baseUrl = location.hostname === 'localhost' ? 'http://localhost:9999' : 'https://miniblog-platzi-nuxt2.netlify.app'
+  //   const url = `${baseUrl}/.netlify/functions/articles`
+  //   const { articles } = await this.$http.$get(url)
+  //   this.articles = articles.map(({ fields: a }) => ({
+  //     ...a,
+  //     author: a['author-name'][0],
+  //     date: new Date(a.updated),
+  //     cover: a.cover[0]?.thumbnails.large.url ?? ''
+  //   }))
+  // },
+  computed: {
+    articles() {
+      return Array.isArray(this.posts) ? this.posts.map(({ fields: a }) => ({
+        ...a,
+        author: a['author-name'][0],
+        date: new Date(a.updated),
+        cover: a.cover[0]?.thumbnails.large.url ?? ''
+      })) : []
+    }
   }
 }
 </script>
