@@ -1,5 +1,3 @@
 module.exports = {
-	services: [
-		require('volar-service-vetur').default(),
-	],
-};
+  services: [require('volar-service-vetur').default()],
+}

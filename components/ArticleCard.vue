@@ -1,6 +1,8 @@
 <template>
   <div class="article-card">
-    <NuxtLink :to="slug"><h3>{{ title }}</h3></NuxtLink>
+    <NuxtLink :to="slug"
+      ><h3>{{ title }}</h3></NuxtLink
+    >
     <div class="author">
       <p>Por {{ author }}</p>
       <small>Fechade publicación: {{ date }}</small>
@@ -8,7 +10,7 @@
     </div>
 
     <figure>
-      <img :src="cover" alt="cover">
+      <img :src="cover" alt="cover" />
     </figure>
 
     <p>{{ description }}</p>
@@ -47,7 +49,7 @@ export default {
       type: String,
       default: '',
     },
-  }
+  },
 }
 </script>
 

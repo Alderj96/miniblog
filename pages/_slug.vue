@@ -9,10 +9,7 @@
 
       <p>{{ post.description }}</p>
       <figure>
-        <img
-          :src="post.cover"
-          :alt="post.cover"
-        >
+        <img :src="post.cover" :alt="post.cover" />
         <figcaption>Portada - {{ post.title }}</figcaption>
       </figure>
 
@@ -27,7 +24,7 @@ import VueMarkdown from 'vue-markdown'
 export default {
   name: 'ArticlePage',
   components: {
-    VueMarkdown
+    VueMarkdown,
   },
   data() {
     return {
@@ -37,18 +34,16 @@ export default {
         updated: '14/08/2022',
         description: 'Lorem ipsum dolor amet',
         cover: 'https://placehold.co/1024x420',
-        content: '# Title\n\n## Second Title\n\nLorem ipsum dolor sit amet'
-      }
+        content: '# Title\n\n## Second Title\n\nLorem ipsum dolor sit amet',
+      },
     }
   },
   head() {
     return {
       title: this.post.title,
-      meta: [
-        { name: 'description', content: this.post?.description ?? '' }
-      ]
+      meta: [{ name: 'description', content: this.post?.description ?? '' }],
     }
-  }
+  },
 }
 </script>
 

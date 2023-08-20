@@ -11,7 +11,7 @@ const headers = {
 
 exports.handler = async function (evt) {
   const articles = await db('articles').select().all()
-  
+
   return {
     statusCode: 200,
     headers,

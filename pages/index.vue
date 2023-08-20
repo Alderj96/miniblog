@@ -15,21 +15,19 @@
 </template>
 
 <script>
-
 export default {
-    name: 'IndexPage',
-    data() {
-      return {
-        articles: [
-          {
-            title: 'Mi primer post',
-            slug: 'mi-primer-post',
-            date: new Date(),
-
-          }
-        ]
-      }
+  name: 'IndexPage',
+  data() {
+    return {
+      articles: [
+        {
+          title: 'Mi primer post',
+          slug: 'mi-primer-post',
+          date: new Date(),
+        },
+      ],
     }
+  },
 }
 </script>
 
